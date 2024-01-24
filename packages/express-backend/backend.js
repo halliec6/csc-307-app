@@ -75,6 +75,27 @@ app.get("/users/:id", (req, res) => {
   }
 });
 
+// why can't I use findUserByID, why is calling delete UserById better
+const deleteUserById = (userId)=>{
+  const index = users["users_list"].findIndex(exeistingUser => exeistingUser.id === userId)
+  if(index!==-1){
+    const deletedUser = users["users_list"].splice(index, 1)[0];
+    return deletedUser;    
+  }else{
+    return null;
+  }
+} 
+  
+app.delete("/users/", (req, res) => {
+  const id = req.params.id; 
+  let result = deleteUserById(id);
+  if (result === undefined) {
+    res.status(404).send("Resource not found.");
+  } else {
+    res.send(result);
+  }
+});
+
 const addUser = (user) => {
     users["users_list"].push(user);
     return user;
