@@ -62,12 +62,52 @@ const findUserByName = (name) => {
     }
   });
 
+  const findUserByNameJob = (name, job) => {
+    return users["users_list"].filter(
+      (user) => user["name"] === name &&
+                user["job"] === job
+    );
+  };
+  
+  app.get("/users", (req, res) => {
+    const name = req.query.name;
+    const job = req.query.job;
+    if (name != undefined && job!=undefined) {
+      let result = findUserByNameJob(name, job);
+      result = { users_list: result };
+      res.send(result);
+    } else {
+      res.send(users);
+    }
+  });
+
   const findUserById = (id) =>
   users["users_list"].find((user) => user["id"] === id);
 
 app.get("/users/:id", (req, res) => {
   const id = req.params["id"]; //or req.params.id
   let result = findUserById(id);
+  if (result === undefined) {
+    res.status(404).send("Resource not found.");
+  } else {
+    res.send(result);
+  }
+});
+
+// why can't I use findUserByID, why is calling delete UserById better
+const deleteUserById = (userId)=>{
+  const index = users["users_list"].findIndex(exeistingUser => exeistingUser.id === userId)
+  if(index!==-1){
+    const deletedUser = users["users_list"].splice(index, 1)[0];
+    return deletedUser;    
+  }else{
+    return null;
+  }
+} 
+  
+app.delete("/users/", (req, res) => {
+  const id = req.params.id; 
+  let result = deleteUserById(id);
   if (result === undefined) {
     res.status(404).send("Resource not found.");
   } else {
