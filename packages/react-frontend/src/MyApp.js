@@ -32,12 +32,10 @@ function MyApp() {
         });
         setCharacters(updated);
     }
-    // function updateList(person) {
-    //     setCharacters([...characters, person]);
-    // }
+    //called when the 'form' component submits a new user (person)
     function updateList(person) { 
-      postUser(person)
-        .then(() => setCharacters([...characters, person]))
+      postUser(person) //calls postUser to send post request to server
+        .then(() => setCharacters([...characters, person])) //upon success, updates local state, adding new user to existing array
         .catch((error) => {
           console.log(error);
         })
@@ -46,6 +44,7 @@ function MyApp() {
       const promise = fetch("http://localhost:8000/users");
       return promise;
     }
+
     function postUser(person) {
       const promise = fetch("Http://localhost:8000/users", {
         method: "POST",
@@ -53,8 +52,16 @@ function MyApp() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(person),
+      })
+      .then((res)=>{
+        if (res.status !== 201)
+          throw new Error("Not 201, insertion not successful")
+        else
+          return res
+      })
+      .catch((error)=>{
+          console.log(error);
       });
-  
       return promise;
     }
 }
