@@ -123,8 +123,9 @@ const addUser = (user) => {
   };
   
   app.post("/users", (req, res) => {
-    const userToAdd = req.body;
+    const userId = Math.random()
+    const userToAdd = {id: userId, name: req.body.name, job: req.body.job}
     addUser(userToAdd);
-    res.status(201).send();
+    res.status(201).json(userToAdd);
   });
 
