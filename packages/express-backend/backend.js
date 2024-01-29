@@ -98,24 +98,58 @@ app.get("/users/:id", (req, res) => {
 
 // why can't I use findUserByID, why is calling delete UserById better
 const deleteUserById = (userId)=>{
-  const index = users["users_list"].findIndex(exeistingUser => exeistingUser.id === userId)
+  const index = users["users_list"].findIndex(existingUser => existingUser.id === userId);
   if(index!==-1){
     const deletedUser = users["users_list"].splice(index, 1)[0];
+    // res.status(204).send
+    // const deletedUser = deletedUsers[0]
     return deletedUser;    
   }else{
+    // res.send(result);
     return null;
   }
 } 
   
-app.delete("/users/", (req, res) => {
-  const id = req.params.id; 
-  let result = deleteUserById(id);
-  if (result === undefined) {
+// app.delete("/users/:id", (req, res) => {
+//   const id = req.params.id; 
+//   let result = deleteUserById(id);
+//   if (result === null) {
+//     res.status(404).send("Resource not found.");
+//   } else {
+//     res.send(204).send();
+//   }
+// });
+
+app.delete("/users", (req, res) => {
+  const id = req.body.id; 
+  const result = deleteUserById(id);
+  if (result === null) {
     res.status(404).send("Resource not found.");
   } else {
-    res.send(result);
+    res.status(204).send();
   }
 });
+
+// const deleteUser = (userId)=>{
+//   const index = users["users_list"].findIndex(existingUser => existingUser.id === userId)
+//   if (index!==-1){
+//     const deletedUser = users["users_list"].splice(index, 1)[0]
+//     return deletedUser;
+//   }else{
+//     return null
+//   }
+// };
+
+// app.delete("/users", (req, res)=>{
+//   const userToDelete = req.body.id;
+//   const deletedUser = deleteUserById(userToDelete);
+
+//   if (deletedUser){
+//     res.status(204).send();
+//   }else{
+//     res.status(404).send("Could not find user");
+//   }
+// });
 
 const addUser = (user) => {
     users["users_list"].push(user);
@@ -124,7 +158,7 @@ const addUser = (user) => {
   
   app.post("/users", (req, res) => {
     const userId = Math.random()
-    const userToAdd = {id: userId, name: req.body.name, job: req.body.job}
+    const userToAdd = {id: userId.toString(), name: req.body.name, job: req.body.job}
     addUser(userToAdd);
     res.status(201).json(userToAdd);
   });

@@ -27,12 +27,35 @@ function MyApp() {
       );
 
     function removeOneCharacter(index) {
-        const updated = characters.filter((character, i) => {
-        return i !== index;
-        });
-        setCharacters(updated);
+        const person = characters[index]
+        const updated = characters.filter((character, i) => {return i !== index;});
+        
+        deleteOneCharacter(person)
+          .then(()=>setCharacters(updated))
+          .catch((error)=>{
+            console.log(error)
+          })
     }
     
+    function deleteOneCharacter(person) {
+      const promise = fetch(`http://localhost:8000/users/${person.id}`,{
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(person),
+      })
+      .then((res)=>{
+        if (res.status === 202)
+          return res.json(person.id)
+        
+      })
+      .catch((error)=>{
+          console.log(error);
+      });
+      return promise;
+    }
+  
     //called when the 'form' component submits a new user (person)
     function updateList(person) { 
       postUser(person) //calls postUser to send post request to server
