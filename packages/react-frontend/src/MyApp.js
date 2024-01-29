@@ -38,7 +38,7 @@ function MyApp() {
     }
     
     function deleteOneCharacter(person) {
-      const promise = fetch(`http://localhost:8000/users/${person.id}`,{
+      const promise = fetch(`http://localhost:8000/users`,{
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
