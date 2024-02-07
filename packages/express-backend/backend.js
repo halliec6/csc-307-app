@@ -88,10 +88,10 @@ app.listen(port, () => {
         user_services.getUsers(name, job)
         .then((result)=>{
           if (result) res.send(result)
-          else res.send(users);
+          else res.send([]);
         })
         .catch((error)=>{
-          res.status(500).send()
+          res.status(404).send("Not found")
         })
     }
   );
