@@ -24,13 +24,8 @@ function getUsers(name, job) {
   return promise;
 }
 
-function deleteById(id){
-    let promise
-
-    // promise = userModel.deleteOne({_id: ObjectId(id)})
-    // promise = userModel.findByIdAndDelete(id)
-    promise = userModel.deleteOne(id)
-    return promise
+function findUserByIdAndDelete(id){
+    return userModel.findByIdAndDelete(id);
 }
 
 function findUserById(id) {
@@ -62,5 +57,5 @@ export default {
   findUserById,
   findUserByName,
   findUserByJob,
-  deleteById,
+  findUserByIdAndDelete,
 };
